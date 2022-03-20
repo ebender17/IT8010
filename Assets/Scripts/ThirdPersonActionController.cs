@@ -4,6 +4,9 @@ using UnityEngine;
 using Cinemachine;
 using StarterAssets;
 using UnityEngine.UI;
+#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+using UnityEngine.InputSystem;
+#endif
 
 public class ThirdPersonActionController : MonoBehaviour
 {
@@ -14,9 +17,11 @@ public class ThirdPersonActionController : MonoBehaviour
 
     [Header("HUD")]
     [SerializeField] private Image crossHair;
+    [SerializeField] private GameObject waveToolMenu;
 
     private ThirdPersonController thirdPersonController;
     private StarterAssetsInputs starterAssetsInputs;
+    private PlayerInput playerInput;
 
     [Header("Collision")]
     [SerializeField] private LayerMask layerMask;
@@ -27,60 +32,79 @@ public class ThirdPersonActionController : MonoBehaviour
 
     private Transform _currentSelection;
     private WaveObject[] waveObjects;
+    private bool isAiming = false;
     public bool aimInputInitial = false; //flag to indicate first frame when aim is started
     public bool aimStopInputInitial = true; //flag to indicate first frame when aim is stopped
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         starterAssetsInputs = GetComponent<StarterAssetsInputs>();
         thirdPersonController = GetComponent<ThirdPersonController>();
+        playerInput = GetComponent<PlayerInput>();
 
         waveObjects = FindObjectsOfType<WaveObject>();
+
+    }
+
+    private void Start()
+    {
+        aimVirtualCamera.gameObject.SetActive(false);
+        thirdPersonController.SetSensitivty(normalSensitivity);
+        crossHair.gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        playerInput.actions["Aim"].performed += AimCameraAndHUD;
+        playerInput.actions["CancelAim"].performed += DefaultCameraAndHUD;
+        playerInput.actions["Shoot"].performed += HandleObjectSelection;
+    }
+
+    private void OnDisable()
+    {
+        playerInput.actions["Aim"].performed -= AimCameraAndHUD;
+        playerInput.actions["CancelAim"].performed -= DefaultCameraAndHUD;
+        playerInput.actions["Shoot"].performed -= HandleObjectSelection;
     }
 
     // Update is called once per frame
     void Update()
     {
-        HandleAim();
-    }
 
-    private void HandleAim()
-    {
-        if (starterAssetsInputs.aim)
+        if(isAiming == true)
         {
             SelectInteractable();
-
-            if (aimInputInitial == true) //use this flag to call these functions only one time when input is held
-            {
-                aimVirtualCamera.gameObject.SetActive(true);
-                thirdPersonController.SetSensitivty(aimSensitivity);
-                crossHair.gameObject.SetActive(true);
-
-                InteractablesMaterial(highlightColor, 0.4f);
-
-                aimInputInitial = false;
-                aimStopInputInitial = true;
-            }
-
-        }
-        else if(!starterAssetsInputs.aim)
-        {
-            if(aimStopInputInitial == true) //use this flag to call these functions only one time when input is not held
-            {
-                aimVirtualCamera.gameObject.SetActive(false);
-                thirdPersonController.SetSensitivty(normalSensitivity);
-                crossHair.gameObject.SetActive(false);
-
-                InteractablesMaterial(highlightColor, 0);
-
-                aimInputInitial = true;
-                aimStopInputInitial = false;
-            }
-            
         }
     }
-    
+
+
+    private void AimCameraAndHUD(InputAction.CallbackContext context)
+    {
+        playerInput.SwitchCurrentActionMap("Tool");
+
+        aimVirtualCamera.gameObject.SetActive(true);
+        thirdPersonController.SetSensitivty(aimSensitivity);
+        crossHair.gameObject.SetActive(true);
+
+        InteractablesMaterial(highlightColor, 0.4f);
+
+        isAiming = true;
+    }
+
+    private void DefaultCameraAndHUD(InputAction.CallbackContext context)
+    {
+        playerInput.SwitchCurrentActionMap("Player");
+
+        aimVirtualCamera.gameObject.SetActive(false);
+        thirdPersonController.SetSensitivty(normalSensitivity);
+        crossHair.gameObject.SetActive(false);
+
+        InteractablesMaterial(highlightColor, 0);
+
+        isAiming = false;
+
+    }
+
     private void SelectInteractable()
     {
         //Deselection when move cursor off of target
@@ -113,11 +137,17 @@ public class ThirdPersonActionController : MonoBehaviour
             {
                 obj.GetComponent<Renderer>().material.SetColor("_EmissionColor", color);
                 obj.GetComponent<Renderer>().material.SetFloat("_EmissionAmount", amount);
-
-                Debug.Log("Changing interactables material");
             }
 
         }
         
+    }
+
+    private void HandleObjectSelection(InputAction.CallbackContext context)
+    {
+        playerInput.SwitchCurrentActionMap("UI");
+
+        waveToolMenu.gameObject.SetActive(true);
+
     }
 }
