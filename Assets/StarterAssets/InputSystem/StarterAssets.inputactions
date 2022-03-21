@@ -330,6 +330,14 @@
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "ExitUI",
+                    "type": "Button",
+                    "id": "685d1b78-dece-467a-a31d-746b95325417",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -750,6 +758,28 @@
                     "action": "TrackedDeviceOrientation",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7c2b38e5-b3fa-43aa-b6bc-fe57fc6f43f2",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ExitUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "57b7f883-16b2-4dca-95d5-68a6f561ad52",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "ExitUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -925,8 +955,8 @@
                 },
                 {
                     "name": "",
-                    "id": "d4a1287d-ab78-481a-8d7c-802be8267780",
-                    "path": "<Gamepad>/buttonEast",
+                    "id": "cae6a3c9-7fd9-4513-829b-7744e1e47d7e",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
@@ -936,8 +966,8 @@
                 },
                 {
                     "name": "",
-                    "id": "cae6a3c9-7fd9-4513-829b-7744e1e47d7e",
-                    "path": "<Mouse>/leftButton",
+                    "id": "d4a1287d-ab78-481a-8d7c-802be8267780",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",

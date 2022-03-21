@@ -31,6 +31,7 @@ public class ThirdPersonActionController : MonoBehaviour
     public Color highlightColor;
 
     private Transform _currentSelection;
+    private Renderer _currentSelectionRenderer;
     private WaveObject[] waveObjects;
     private bool isAiming = false;
     public bool aimInputInitial = false; //flag to indicate first frame when aim is started
@@ -58,6 +59,7 @@ public class ThirdPersonActionController : MonoBehaviour
         playerInput.actions["Aim"].performed += AimCameraAndHUD;
         playerInput.actions["CancelAim"].performed += DefaultCameraAndHUD;
         playerInput.actions["Shoot"].performed += HandleObjectSelection;
+        playerInput.actions["ExitUI"].performed += CloseWaveUI;
     }
 
     private void OnDisable()
@@ -65,6 +67,7 @@ public class ThirdPersonActionController : MonoBehaviour
         playerInput.actions["Aim"].performed -= AimCameraAndHUD;
         playerInput.actions["CancelAim"].performed -= DefaultCameraAndHUD;
         playerInput.actions["Shoot"].performed -= HandleObjectSelection;
+        playerInput.actions["ExitUI"].performed -= CloseWaveUI;
     }
 
     // Update is called once per frame
@@ -82,6 +85,8 @@ public class ThirdPersonActionController : MonoBehaviour
     {
         playerInput.SwitchCurrentActionMap("Tool");
 
+        Debug.Log("Inside AimCameraAndHUD " + playerInput.currentActionMap);
+
         aimVirtualCamera.gameObject.SetActive(true);
         thirdPersonController.SetSensitivty(aimSensitivity);
         crossHair.gameObject.SetActive(true);
@@ -94,6 +99,8 @@ public class ThirdPersonActionController : MonoBehaviour
     private void DefaultCameraAndHUD(InputAction.CallbackContext context)
     {
         playerInput.SwitchCurrentActionMap("Player");
+
+        Debug.Log("Inside Default Camera and HUD " + playerInput.currentActionMap);
 
         aimVirtualCamera.gameObject.SetActive(false);
         thirdPersonController.SetSensitivty(normalSensitivity);
@@ -120,10 +127,11 @@ public class ThirdPersonActionController : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
         {
             var selection = hit.transform;
-            var selectionRenderer = selection.GetComponent<Renderer>();
-            if (selectionRenderer != null)
+            _currentSelectionRenderer = selection.GetComponent<Renderer>();
+            //var selectionRenderer = selection.GetComponent<Renderer>();
+            if (_currentSelectionRenderer != null)
             {
-                selectionRenderer.material.SetColor("_EmissionColor", selectionColor);
+                _currentSelectionRenderer.material.SetColor("_EmissionColor", selectionColor);
             }
             _currentSelection = selection;
         }
@@ -147,7 +155,31 @@ public class ThirdPersonActionController : MonoBehaviour
     {
         playerInput.SwitchCurrentActionMap("UI");
 
-        waveToolMenu.gameObject.SetActive(true);
+        Debug.Log("Inside Handle Object Selection " + playerInput.currentActionMap);
+
+        if(_currentSelection)
+        {
+            isAiming = false;
+            _currentSelectionRenderer.material.SetColor("_EmissionColor", selectionColor);
+
+            waveToolMenu.gameObject.SetActive(true);
+
+            Cursor.visible = true; //to-do, how to move cursor around screeen and register orrr do we use cursor at all?
+            Cursor.lockState = CursorLockMode.Confined;
+            //just use arrows to move to different text boxes?
+        }
+       
+    }
+
+    private void CloseWaveUI(InputAction.CallbackContext context)
+    {
+        playerInput.SwitchCurrentActionMap("Player");
+
+        InteractablesMaterial(highlightColor, 0);
+
+        waveToolMenu.gameObject.SetActive(false);
+        Cursor.visible = false;
+        _currentSelection = null;
 
     }
 }
