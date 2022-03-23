@@ -39,12 +39,6 @@ public class SineWaveUIManager : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void IncreaseAmplitude()
     {
         if(amplitude < 9)

@@ -8,8 +8,18 @@ public class WaveObject : MonoBehaviour
     private Vector3 _newPosition;
     private float _rawSineWave;
 
-    [SerializeField] private float _frequency = 1;
-    [SerializeField] private float _amplitude = 1;
+    [SerializeField] private int _frequency = 1;
+    [SerializeField] private int _amplitude = 1;
+    [HideInInspector] public int Frequency { 
+        get { return _frequency; } 
+        private set { _frequency = value; } 
+    }
+
+    [HideInInspector] public int Amplitude
+    {
+        get { return _amplitude; }
+        private set { _amplitude = value; }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -27,5 +37,12 @@ public class WaveObject : MonoBehaviour
         _newPosition.z = 0.0f;
 
         transform.position = _startingPosition + _newPosition;
+
+    }
+
+    public void UpdateValues(int amp, int freq)
+    {
+        _amplitude = amp;
+        _frequency = freq;
     }
 }

@@ -1230,8 +1230,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c0859e27d9e52144ba99e393956c133, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _frequency: 1
-  _amplitude: 1
+  _frequency: 2
+  _amplitude: 2
 --- !u!1 &988477744
 GameObject:
   m_ObjectHideFlags: 0
@@ -1741,8 +1741,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c0859e27d9e52144ba99e393956c133, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _frequency: 1
-  _amplitude: 1
+  _frequency: 3
+  _amplitude: 3
 --- !u!1 &1186265696
 GameObject:
   m_ObjectHideFlags: 0
@@ -2702,7 +2702,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1664936846}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 53191932}
+        m_TargetAssemblyTypeName: SineWaveUIManager, Assembly-CSharp
+        m_MethodName: UpdateValues
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1664936846
 MonoBehaviour:
   m_ObjectHideFlags: 0

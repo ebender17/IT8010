@@ -31,7 +31,8 @@ public class ThirdPersonActionController : MonoBehaviour
     public Color highlightColor;
 
     private Transform _currentSelection = null;
-    private Renderer _currentSelectionRenderer;
+    private Renderer _currentSelectionRenderer = null;
+    private WaveObject _currentSelectionWave = null;
     private WaveObject[] waveObjects;
     private bool isAiming = false;
     public bool aimInputInitial = false; //flag to indicate first frame when aim is started
@@ -139,8 +140,8 @@ public class ThirdPersonActionController : MonoBehaviour
         {
             var selection = hit.transform;
             _currentSelectionRenderer = selection.GetComponent<Renderer>();
-            //var selectionRenderer = selection.GetComponent<Renderer>();
-            if (_currentSelectionRenderer != null)
+            _currentSelectionWave = selection.GetComponent<WaveObject>();
+            if (_currentSelectionRenderer != null && _currentSelectionWave != null)
             {
                 _currentSelectionRenderer.material.SetColor("_EmissionColor", selectionColor);
             }
@@ -168,7 +169,7 @@ public class ThirdPersonActionController : MonoBehaviour
 
         Debug.Log("Inside Handle Object Selection " + playerInput.currentActionMap);
 
-        if(_currentSelection)
+        if (_currentSelection && _currentSelectionWave)
         {
             isAiming = false;
             _currentSelectionRenderer.material.SetColor("_EmissionColor", selectionColor);
@@ -177,9 +178,8 @@ public class ThirdPersonActionController : MonoBehaviour
 
             //todo, send values to UI from current selection
             //might experience issues if the UI is not enabled in time
-            //_sendCorrectValues.RaiseEvent();
-
-
+            _retrieveValues.RaiseEvent(_currentSelectionWave.Amplitude, _currentSelectionWave.Frequency);
+            
             Cursor.visible = true; //to-do, just use arrows to move to different text boxes?
             Cursor.lockState = CursorLockMode.Confined;
         }
@@ -203,6 +203,7 @@ public class ThirdPersonActionController : MonoBehaviour
         if(_currentSelection != null)
         {
             //todo, call function from current selection that updates the values on the object
+            _currentSelectionWave.UpdateValues(amp, freq);
         }
     }
 
