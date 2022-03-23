@@ -220,6 +220,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   amplitudeValue: {fileID: 1094142821}
   frequencyValue: {fileID: 1109584340}
+  _updateValues: {fileID: 11400000, guid: 33b0182ec7074cf42afc541cd016cd4f, type: 2}
+  _retrieveValues: {fileID: 11400000, guid: a9c61a6993196cd45bfbd1eb157fd58b, type: 2}
 --- !u!1 &321701308
 GameObject:
   m_ObjectHideFlags: 0
@@ -1563,6 +1565,8 @@ MonoBehaviour:
   highlightColor: {r: 0.20496617, g: 0.7929122, b: 0.9245283, a: 1}
   aimInputInitial: 0
   aimStopInputInitial: 1
+  _updateValues: {fileID: 11400000, guid: 33b0182ec7074cf42afc541cd016cd4f, type: 2}
+  _retrieveValues: {fileID: 11400000, guid: a9c61a6993196cd45bfbd1eb157fd58b, type: 2}
 --- !u!1 &1109584337
 GameObject:
   m_ObjectHideFlags: 0

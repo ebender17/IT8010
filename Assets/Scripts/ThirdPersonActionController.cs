@@ -30,12 +30,18 @@ public class ThirdPersonActionController : MonoBehaviour
     public Color selectionColor;
     public Color highlightColor;
 
-    private Transform _currentSelection;
+    private Transform _currentSelection = null;
     private Renderer _currentSelectionRenderer;
     private WaveObject[] waveObjects;
     private bool isAiming = false;
     public bool aimInputInitial = false; //flag to indicate first frame when aim is started
     public bool aimStopInputInitial = true; //flag to indicate first frame when aim is stopped
+
+    [Header("Listening on Channels")]
+    [SerializeField] IntEventChannelSO _updateValues = default;
+
+    [Header("Broadcasting on Channels")]
+    [SerializeField] IntEventChannelSO _retrieveValues = default;
 
     private void Awake()
     {
@@ -47,12 +53,6 @@ public class ThirdPersonActionController : MonoBehaviour
 
     }
 
-    private void Start()
-    {
-        aimVirtualCamera.gameObject.SetActive(false);
-        thirdPersonController.SetSensitivty(normalSensitivity);
-        crossHair.gameObject.SetActive(false);
-    }
 
     private void OnEnable()
     {
@@ -60,6 +60,11 @@ public class ThirdPersonActionController : MonoBehaviour
         playerInput.actions["CancelAim"].performed += DefaultCameraAndHUD;
         playerInput.actions["Shoot"].performed += HandleObjectSelection;
         playerInput.actions["ExitUI"].performed += CloseWaveUI;
+
+        if(_updateValues != null)
+        {
+            _updateValues.OnEventRaised += UpdateSelectionAmpltitude;
+        }
     }
 
     private void OnDisable()
@@ -68,6 +73,12 @@ public class ThirdPersonActionController : MonoBehaviour
         playerInput.actions["CancelAim"].performed -= DefaultCameraAndHUD;
         playerInput.actions["Shoot"].performed -= HandleObjectSelection;
         playerInput.actions["ExitUI"].performed -= CloseWaveUI;
+    }
+    private void Start()
+    {
+        aimVirtualCamera.gameObject.SetActive(false);
+        thirdPersonController.SetSensitivty(normalSensitivity);
+        crossHair.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -164,9 +175,13 @@ public class ThirdPersonActionController : MonoBehaviour
 
             waveToolMenu.gameObject.SetActive(true);
 
-            Cursor.visible = true; //to-do, how to move cursor around screeen and register orrr do we use cursor at all?
+            //todo, send values to UI from current selection
+            //might experience issues if the UI is not enabled in time
+            //_sendCorrectValues.RaiseEvent();
+
+
+            Cursor.visible = true; //to-do, just use arrows to move to different text boxes?
             Cursor.lockState = CursorLockMode.Confined;
-            //just use arrows to move to different text boxes?
         }
        
     }
@@ -182,4 +197,13 @@ public class ThirdPersonActionController : MonoBehaviour
         _currentSelection = null;
 
     }
+
+    private void UpdateSelectionAmpltitude(int amp, int freq)
+    {
+        if(_currentSelection != null)
+        {
+            //todo, call function from current selection that updates the values on the object
+        }
+    }
+
 }

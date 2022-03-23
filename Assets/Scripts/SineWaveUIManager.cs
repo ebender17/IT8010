@@ -1,21 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class SineWaveUIManager : MonoBehaviour
 {
-    private float amplitude;
-    private float frequency;
+    private int amplitude;
+    private int frequency;
 
     [SerializeField] private TMP_Text amplitudeValue;
     [SerializeField] private TMP_Text frequencyValue;
 
+    [Header("Broadcasting Events")]
+    [SerializeField] private IntEventChannelSO _updateValues = default;
+
+    [Header("Listening Events")]
+    [SerializeField] private IntEventChannelSO _retrieveValues = default;
+
+
+    private void OnEnable()
+    {
+        if(_retrieveValues != null)
+        {
+            _retrieveValues.OnEventRaised += RetrieveValues;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if(_retrieveValues != null)
+        {
+            _retrieveValues.OnEventRaised -= RetrieveValues; 
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
-        
+        this.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -62,6 +83,14 @@ public class SineWaveUIManager : MonoBehaviour
 
     public void UpdateValues()
     {
+        _updateValues.OnEventRaised(amplitude, frequency);
+    }
 
+    private void RetrieveValues(int amp, int freq)
+    {
+        amplitude = amp;
+        frequency = freq;
+        amplitudeValue.text = amplitude.ToString();
+        frequencyValue.text = frequency.ToString();
     }
 }
