@@ -178,7 +178,7 @@ public class ThirdPersonActionController : MonoBehaviour
 
             //todo, send values to UI from current selection
             //might experience issues if the UI is not enabled in time
-            _retrieveValues.RaiseEvent(_currentSelectionWave.Amplitude, _currentSelectionWave.Frequency);
+            _retrieveValues.RaiseEvent(_currentSelectionWave.Amplitude, _currentSelectionWave.Frequency, _currentSelectionWave.VerticalShift);
             
             Cursor.visible = true; //to-do, just use arrows to move to different text boxes?
             Cursor.lockState = CursorLockMode.Confined;
@@ -198,12 +198,12 @@ public class ThirdPersonActionController : MonoBehaviour
 
     }
 
-    private void UpdateSelectionAmpltitude(int amp, int freq)
+    private void UpdateSelectionAmpltitude(int amp, int freq, int vertical)
     {
         if(_currentSelection != null)
         {
-            //todo, call function from current selection that updates the values on the object
-            _currentSelectionWave.UpdateValues(amp, freq);
+            //call function from current selection that updates the values on the object
+            _currentSelectionWave.UpdateValues(amp, freq, vertical);
         }
     }
 

@@ -7,9 +7,11 @@ public class SineWaveUIManager : MonoBehaviour
 {
     private int amplitude;
     private int frequency;
+    private int verticalShift;
 
     [SerializeField] private TMP_Text amplitudeValue;
     [SerializeField] private TMP_Text frequencyValue;
+    [SerializeField] private TMP_Text verticalValue;
 
     [Header("Broadcasting Events")]
     [SerializeField] private IntEventChannelSO _updateValues = default;
@@ -75,16 +77,36 @@ public class SineWaveUIManager : MonoBehaviour
         }
     }
 
-    public void UpdateValues()
+    public void IncreaseVertical()
     {
-        _updateValues.OnEventRaised(amplitude, frequency);
+        if (verticalShift < 9)
+        {
+            verticalShift++;
+            verticalValue.text = verticalShift.ToString();
+        }
     }
 
-    private void RetrieveValues(int amp, int freq)
+    public void DecreaseVertical()
+    {
+        if (frequency > 0)
+        {
+            verticalShift--;
+            verticalValue.text = verticalShift.ToString();
+        }
+    }
+
+    public void UpdateValues()
+    {
+        _updateValues.OnEventRaised(amplitude, frequency, verticalShift);
+    }
+
+    private void RetrieveValues(int amp, int freq, int vertical)
     {
         amplitude = amp;
         frequency = freq;
+        verticalShift = vertical;
         amplitudeValue.text = amplitude.ToString();
         frequencyValue.text = frequency.ToString();
+        verticalValue.text = verticalShift.ToString();
     }
 }

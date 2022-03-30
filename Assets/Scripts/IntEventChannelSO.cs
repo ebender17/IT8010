@@ -7,12 +7,12 @@ public class IntEventChannelSO : ScriptableObject
 {
     public IntEventAction OnEventRaised;
 
-    public void RaiseEvent(int value, int value2)
+    public void RaiseEvent(int value, int value2, int value3)
     {
         if(OnEventRaised != null)
         {
-            OnEventRaised.Invoke(value, value2);
+            OnEventRaised.Invoke(value, value2, value3);
         }
     }
 }
-public delegate void IntEventAction(int value, int value2);
+public delegate void IntEventAction(int value, int value2, int value3);
