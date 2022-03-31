@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 #endif
 
-public class ThirdPersonActionController : MonoBehaviour
+public class WaveToolController : MonoBehaviour
 {
     [Header("Camera Control")]
     [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
