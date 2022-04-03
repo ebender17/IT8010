@@ -97,8 +97,6 @@ public class WaveToolController : MonoBehaviour
     {
         playerInput.SwitchCurrentActionMap("Tool");
 
-        Debug.Log("Inside AimCameraAndHUD " + playerInput.currentActionMap);
-
         aimVirtualCamera.gameObject.SetActive(true);
         thirdPersonController.SetSensitivty(aimSensitivity);
         crossHair.gameObject.SetActive(true);
@@ -110,9 +108,13 @@ public class WaveToolController : MonoBehaviour
 
     private void DefaultCameraAndHUD(InputAction.CallbackContext context)
     {
-        playerInput.SwitchCurrentActionMap("Player");
+        SetDefaults();
 
-        Debug.Log("Inside Default Camera and HUD " + playerInput.currentActionMap);
+    }
+
+    private void SetDefaults()
+    {
+        playerInput.SwitchCurrentActionMap("Player");
 
         aimVirtualCamera.gameObject.SetActive(false);
         thirdPersonController.SetSensitivty(normalSensitivity);
@@ -121,7 +123,6 @@ public class WaveToolController : MonoBehaviour
         InteractablesMaterial(highlightColor, 0);
 
         isAiming = false;
-
     }
 
     private void SelectInteractable()
@@ -165,12 +166,16 @@ public class WaveToolController : MonoBehaviour
 
     private void HandleObjectSelection(InputAction.CallbackContext context)
     {
-        playerInput.SwitchCurrentActionMap("UI");
-
-        Debug.Log("Inside Handle Object Selection " + playerInput.currentActionMap);
+        
 
         if (_currentSelection && _currentSelectionWave)
         {
+            playerInput.SwitchCurrentActionMap("UI");
+
+            Debug.Log("Inside Handle Object Selection " + playerInput.currentActionMap);
+
+            crossHair.gameObject.SetActive(false);
+
             isAiming = false;
             _currentSelectionRenderer.material.SetColor("_EmissionColor", selectionColor);
 
@@ -195,6 +200,8 @@ public class WaveToolController : MonoBehaviour
         waveToolMenu.gameObject.SetActive(false);
         Cursor.visible = false;
         _currentSelection = null;
+
+        SetDefaults();
 
     }
 
