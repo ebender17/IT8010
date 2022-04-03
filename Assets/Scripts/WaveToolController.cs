@@ -167,7 +167,6 @@ public class WaveToolController : MonoBehaviour
     private void HandleObjectSelection(InputAction.CallbackContext context)
     {
         
-
         if (_currentSelection && _currentSelectionWave)
         {
             playerInput.SwitchCurrentActionMap("UI");
@@ -178,14 +177,13 @@ public class WaveToolController : MonoBehaviour
 
             isAiming = false;
             _currentSelectionRenderer.material.SetColor("_EmissionColor", selectionColor);
+            _currentSelectionRenderer.material.SetFloat("_NoiseAmount", 0.5f);
 
             waveToolMenu.gameObject.SetActive(true);
 
-            //todo, send values to UI from current selection
-            //might experience issues if the UI is not enabled in time
             _retrieveValues.RaiseEvent(_currentSelectionWave.Amplitude, _currentSelectionWave.Frequency, _currentSelectionWave.VerticalShift);
             
-            Cursor.visible = true; //to-do, just use arrows to move to different text boxes?
+            Cursor.visible = true; 
             Cursor.lockState = CursorLockMode.Confined;
         }
        
@@ -197,6 +195,7 @@ public class WaveToolController : MonoBehaviour
 
         InteractablesMaterial(highlightColor, 0);
 
+        _currentSelectionRenderer.material.SetFloat("_NoiseAmount", 0f);
         waveToolMenu.gameObject.SetActive(false);
         Cursor.visible = false;
         _currentSelection = null;
